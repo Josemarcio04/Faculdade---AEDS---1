@@ -1,0 +1,176 @@
+#include <iostream>
+
+using namespace std;
+
+struct ContaBancaria {
+	
+	string numerodaconta;
+	float saldo;
+	
+};
+
+void informar (ContaBancaria &conta){
+		
+		cout << "Informe o numero da conta bancaria: ";
+		cin >> conta.numerodaconta;
+		
+		cout << "Informe o saldo na conta: ";
+		cin >> conta.saldo;
+}
+
+void imprimir (ContaBancaria &conta){
+	
+	cout << endl;
+	cout << "- Conta -" << endl;
+	cout << "Numero da conta: " << conta.numerodaconta << "." << endl;
+	cout << "Saldo: " << conta.saldo << "." << endl;
+	cout << endl;
+}
+
+void saque (ContaBancaria &conta){
+	
+	float valor = 0;
+	
+	if (conta.saldo < 0){
+		
+		cout << "Nao ha saldo disponivel para saque." << endl;
+		
+		cout << "Dados atualizados: " << endl;
+		imprimir (conta);
+	} else {
+		
+		cout << "Saldo disponivel para saque: " << "R$ " << conta.saldo << "." << endl;
+		cout << "Informe o valor que deseja sacar: R$ ";
+		cin >> valor;
+		
+		while (valor < 0){
+			
+			cout << "Voce digitou um valor invalido, selecione um valor maior ou igual a 0: ";
+			cin >> valor;
+		}
+		
+		while (valor > conta.saldo){
+			
+			cout << "Voce informou um valor superior ao saldo que consta na conta. Favor informar novamente o valor que deseja sacar, caso nao deseje mais realizar o saque, digite 0: ";
+			cin >> valor;
+		}
+		
+		if (conta.saldo != 0){
+			
+			
+			if (valor != 0){
+				
+				cout << "Saque realizado com sucesso." << endl;	
+			
+				conta.saldo = conta.saldo - valor;
+				
+				cout << "Dados atualizados: " << endl;
+				imprimir (conta);
+				
+			} else {
+				
+				cout << "Operacao cancelada." << endl;
+				
+				cout << "Dados atualizados: " << endl;
+				imprimir (conta);
+			}
+		
+		} else {
+			
+			cout << "A conta nao tinha rescursos suficientes para realizar saques. Operacao Cancelada." << endl;
+			
+			cout << "Dados atualizados: " << endl;
+			imprimir (conta);
+		}
+	}
+}
+
+void deposito (ContaBancaria &conta){
+	
+	float valor = 0;
+	
+	cout << "Informe o valor que deseja depositar: R$ ";
+	cin >> valor;
+	
+	while (valor < 0){
+		
+		cout << "Voce digitou um valor invalido, favor informar um valor maior que 0 caso deseje depositar, ou 0, caso deseje nao depositar: ";
+		cin >> valor;
+	}
+	
+	if (valor == 0){
+		
+		cout << "Operacao cancelada." << endl;
+		
+		cout << "Dados atualizados: " << endl;
+		
+		imprimir (conta);
+	} else {
+		
+		cout << "Deposito realizado com sucesso." << endl;
+		
+		conta.saldo = conta.saldo + valor;
+		
+		cout << "Dados atualizados: " << endl;
+		
+		imprimir (conta);
+	}
+}
+
+string perguntar (){
+	
+	string pergunta2;
+		
+	cout << "Voce deseja realizar Saque ou Deposito? ";
+	cin >> pergunta2;
+		
+	while (pergunta2 != "Saque" && pergunta2 != "Deposito" && pergunta2 != "saque" && pergunta2 != "deposito"){
+			
+		cout << "Voce digitou um codigo invalido. Deseja realizar saque ou deposito? ";
+		cin >> pergunta2;
+	}
+		
+	return pergunta2;
+}
+
+int main (){
+	
+	ContaBancaria conta;
+	string chamar;
+	string pergunta;
+	
+	informar(conta);
+	
+	imprimir (conta);
+	
+	cout << "Deseja realizar alguma operacao? Se sim digite sim, se nao, digite nao: ";
+	cin >> pergunta;
+	
+	while (pergunta != "Sim" && pergunta != "Nao" && pergunta != "sim" && pergunta != "nao"){
+		
+		cout << "Voce digitou um codigo invalido. Deseja realizar algum saque ou deposito? Se sim digite Sim, se nao, digite Nao: ";
+		cin >> pergunta;
+	}
+	
+	while (pergunta == "Sim" || pergunta == "sim"){
+		
+		chamar = perguntar ();
+	
+		if (chamar == "Saque" || chamar == "saque"){
+		
+			saque (conta);
+		}else {
+			
+			if (chamar == "Deposito" || chamar == "deposito"){
+			
+				deposito (conta);
+			
+			}
+		}
+		
+		cout << "Deseja realizar alguma outra operacao? Se sim digite sim, se nao, digite nao: ";
+		cin >> pergunta;
+	}
+
+	return 0;
+}
