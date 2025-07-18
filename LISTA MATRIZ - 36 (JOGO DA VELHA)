@@ -1,0 +1,407 @@
+#include <iostream>
+#include <math.h>
+
+using namespace std;
+
+void preencher (char **matriz, int linhas, int colunas){
+	
+	cout << "Jogo da velha: " << endl;
+	cout << endl;
+	
+	cout << "\t1\t2\t3" << endl;
+	cout << endl;
+	
+	for (int l = 0; l < linhas; l++){
+		
+		if (l == 0){
+				
+			cout << "1\t";
+		} else {
+				
+			if (l == 1){
+					
+				cout << "2\t";
+			} else {
+					
+				if (l == 2){
+					
+					cout << "3\t";
+				}
+			}
+		}
+		
+		for (int c = 0; c < colunas; c++){
+			
+			matriz [l] [c] = ' ';
+			
+			if (c < 2){
+				
+				cout << matriz [l] [c] << "   |   ";
+			} else {
+				
+				cout << matriz [l] [c];
+			}
+		}
+		
+		if (l < 2){
+			
+			cout << endl;
+			cout << "     -----------------------" << endl;
+		} else {
+			
+			cout << endl;
+		}
+	}
+	
+	cout << endl;
+}
+
+void jogo (char **matriz, int linhas, int colunas){
+	
+	char jogador1;
+	char jogador2;
+	
+	cout << "Jogador 1, vai jogar com o X ou com o O?: ";
+	cin >> jogador1;
+	
+	while (jogador1 != 'X' && jogador1 != 'O'){
+		
+		cout << "Voce informou um valor invalido. Jogador 1, vai jogar com o X ou com o O?: ";
+		cin >> jogador1;
+	}
+	
+	if (jogador1 == 'X'){
+		
+		jogador2 = 'O';
+	} else {
+		
+		jogador2 = 'X';
+	} 
+	
+	int l = 0;
+	int c = 0;
+	int contagem = 1;
+	int contagem1 = 0;
+	int contagem2 = 0;
+	int contagem3 = 0;
+	int contagem4 = 0;
+	int jogador = 0;
+	char pergunta = 'S';
+	
+	while ((contagem <= linhas * colunas) && contagem1 < 3 && contagem2 < 3 && contagem3 < 3 && contagem4 < 3 || pergunta == 'S'){
+		
+		if (contagem % 2 == 0){
+			
+			jogador = 2;
+		} else {
+			
+			jogador = contagem % 2;
+		}
+		
+		cout << "Jogador " << jogador << ", escolher linha que deseja, lembrando que so ha 3 linhas: ";
+		cin >> l;
+	
+		while (l < 1 || l > 3){
+		
+			cout << "Escolher uma linha de 1 a 3: ";
+			cin >> l;
+		}
+	
+		if (l == 1){
+		
+			l = 0;
+		} else {
+		
+			if(l == 2){
+			
+				l = 1;
+			} else {
+				
+				l = 2;
+			}		
+		}
+	
+		cout << "Agora escolha a coluna que deseja, lembrando que so ha 3 colunas: ";
+		cin >> c;
+		
+		while (c < 1 || c > 3){
+			
+			cout << "Escolher uma coluna de 1 a 3: ";
+			cin >> c;
+		}
+		
+		if (c == 1){
+			
+			c = 0;
+		} else {
+			
+			if(c == 2){
+				
+				c = 1;
+			} else {
+				
+				c = 2;
+			}		
+		}
+		
+		while (matriz [l] [c] != ' '){
+			
+			cout << "Essa posicao ja foi preenchida, selecionar outra posicao. Informe a linha que deseja: ";
+			cin >> l;
+			
+			while (l < 1 || l > 3){
+			
+				cout << "Escolher uma linha de 1 a 3: ";
+				cin >> l;
+			}
+		
+			if (l == 1){
+			
+				l = 0;
+			} else {
+			
+				if(l == 2){
+				
+					l = 1;
+				} else {
+				
+					l = 2;
+				}		
+			}
+			
+			cout << "Selecione a coluna que deseja: ";
+			cin >> c;
+			
+			while (c < 1 || c > 3){
+			
+				cout << "Escolher uma coluna de 1 a 3: ";
+				cin >> c;
+			}
+		
+			if (c == 1){
+			
+				c = 0;
+			} else {
+			
+				if(c == 2){
+				
+					c = 1;
+				} else {
+				
+				c = 2;
+				}		
+			}	
+		}
+	
+		if (jogador == 1){
+			
+			matriz [l] [c] = jogador1;
+		} else {
+			
+			matriz [l] [c] = jogador2;
+		}
+		
+		cout << endl;
+		
+		cout << "\t1\t2\t3\t"<<endl;
+		
+		cout << endl;
+		
+		for (int l = 0; l < linhas; l++){
+			
+			if (l == 0){
+				
+				cout << "1\t";
+			} else {
+				
+				if (l == 1){
+					
+					cout << "2\t";
+				} else {
+					
+					if (l == 2){
+						
+						cout << "3\t";
+					}
+				}
+			}
+			
+			for (int c = 0; c < colunas; c++){
+			
+				if (c < 2){
+				
+					cout << matriz [l] [c] << "   |   ";
+				} else {
+				
+					cout << matriz [l] [c];
+				}
+			}
+		
+			if (l < 2){
+			
+				cout << endl;
+				cout << "     -----------------------" << endl;
+			} else {
+			
+				cout << endl;
+			}	
+		}
+		
+		cout << endl;
+		
+		//	Condição 1: Diagonal principal
+		
+		contagem1 = 0;
+		
+		if (l == c){
+			
+			for (int aux = 0; aux < linhas; aux++){
+			
+				if (matriz [l] [c] == matriz [aux] [aux]){
+					
+					contagem1++;
+				}
+			}
+			
+			if (contagem1 == 3){
+				
+				if (matriz [l] [c] == jogador1){
+					
+					cout << "O vencedor e o jogador 1.";
+					
+				} else {
+					
+					cout << "O vencedor e o jogador 2.";
+				}
+			}
+		}
+			
+		//	Condição 2: Diagonal Secundária
+	
+		contagem4 = 0;
+					
+		if (l + c == linhas - 1){
+						
+			for (int auxl = 0; auxl < linhas; auxl++){
+							
+				for (int auxc = 0; auxc < colunas; auxc++){
+								
+					if (auxl + auxc == linhas - 1){
+									
+						if (matriz [l] [c] == matriz [auxl] [auxc]){
+										
+							contagem4++;
+						}
+					}
+				}
+			}
+		}
+			
+		if (contagem4 == 3){
+				
+			if (matriz [l] [c] == jogador1){
+					
+				cout << "O vencedor e o jogador 1.";
+			} else {
+					
+				cout << "O vencedor e o jogador 2.";
+			}
+		} 
+			
+		//	Condição 3: Coluna
+			
+			contagem2 = 0;
+					
+			for (int auxl = 0; auxl < linhas; auxl++) {
+					
+				if (matriz [l] [c] == matriz [auxl] [c]){
+							
+					contagem2++;
+				}
+			}
+		
+		if (contagem2 == 3){
+					
+			if (matriz [l] [c] == jogador1){
+							
+				cout << "O vencedor e o jogador 1.";
+			} else {
+							
+				cout << "O vencedor e o jogador 2.";
+			}			
+		} 
+		
+		//	 Condição 4: Linha
+					
+		contagem3 = 0;
+								
+		for (int auxc = 0; auxc < colunas; auxc++){
+									
+			if (matriz [l] [c] == matriz [l] [auxc]){
+										
+				contagem3++;
+			}
+		}
+		
+		if (contagem3 == 3){
+								
+			if (matriz [l] [c] == jogador1){
+										
+				cout << "O vencedor e o jogador 1.";
+			} else {
+										
+				cout << "O vencedor e o jogador 2.";
+			}
+		}
+		
+		contagem++;
+		
+		if (contagem1 == 3 || contagem2 == 3 || contagem3 == 3 || contagem4 == 3 || (contagem > linhas * colunas)){
+			
+			if (contagem1 < 3 && contagem2 < 3 && contagem3 < 3 && contagem4 < 3){
+				
+				cout << "Empate." << endl;
+			}
+			
+			cout << endl;
+			cout << "Deseja jogar novamente? Digite S para sim, e qualquer outro valor para nao: ";
+			cin >> pergunta;
+			
+			for (int l = 0; l < linhas; l++){
+				
+				for (int c = 0; c < colunas; c++){
+					
+					matriz [l] [c] = ' ';
+				}
+			}
+			
+			contagem = 1;
+		}
+	}
+}
+
+int main (){
+	
+	char **matriz;
+	int linhas = 3;
+	int colunas = 3;
+	
+	/*cout << "Informe o numero de linhas: ";
+	cin >> linhas;
+	
+	cout << "Informe o numero de colunas: ";
+	cin >> colunas;*/
+	
+	matriz = new char *[linhas];
+	
+	for (int i = 0; i < linhas; i++){
+		
+		matriz [i] = new char [colunas];
+	}
+	
+	preencher (matriz, linhas, colunas);
+	
+	jogo (matriz, linhas, colunas);
+	
+	return 0;
+}				
