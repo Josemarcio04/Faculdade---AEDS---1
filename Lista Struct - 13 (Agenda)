@@ -1,0 +1,206 @@
+#include <iostream>
+
+using namespace std;
+
+struct Contato {
+	
+	string Nome;
+	string Numero;
+};
+
+struct Agenda {
+	
+	Contato *c;
+	Contato *cAntigo;
+	
+	void preencher (Agenda &a, int qntd){
+		
+		a.c = new Contato [qntd];
+	
+		for (int i = 0; i < qntd; i++){
+			
+			cout << "Informe o nome do contato " << i + 1 << ": ";
+			cin >> a.c[i].Nome;
+			
+			for (int aux = 0; aux < i; aux++){
+				
+				while (a.c[aux].Nome == a.c[i].Nome){
+					
+					cout << "Um contato com esse nome ja foi informado, informe outro nome para o contato: ";
+					cin >> a.c[i].Nome;
+				}
+			}
+			
+			cout << "Informe o numero do contato " << i + 1 << ": ";
+			cin >> a.c[i].Numero;
+		}
+	}
+	
+	void adicionar (Agenda &a, int &qntd){
+	
+		int pergunta = 0;
+		a.cAntigo = new Contato [qntd];
+		
+		cout << "Deseja adicionar quantos contatos? ";
+		cin >> pergunta;
+		
+		for (int i = 0; i < qntd; i++){
+			
+			a.cAntigo [i] = a.c[i]; 
+		}
+		
+		qntd = qntd + pergunta;
+		
+		a.c = new Contato [qntd];
+		
+		for (int i = 0; i < qntd - pergunta; i++){
+			
+			a.c [i] = a.cAntigo [i];
+		}
+		
+		for (int i = qntd - pergunta; i < qntd; i++){
+			
+			cout << "Informe o nome do contato que deseja adicionar: ";
+			cin >> a.c[i].Nome;
+			
+			for (int aux = 0; aux < i; aux++){
+				
+				while (a.c[i].Nome == a.c[aux].Nome){
+					
+					cout << "Ja ha um contato com esse mesmo nome, favor inserir um novo nome para este contato: ";
+					cin >> a.c[i].Nome;
+				}
+			}
+			
+			cout << "Informe o numero do contato que deseja adicionar: ";
+			cin >> a.c[i].Numero;
+		}
+		
+		cout << "Dados atualizados: " << endl;
+	
+	}
+	
+	void excluir (Agenda &a, int &qntd){
+		
+		string ContatoExcluir;
+		int contagem = 0;
+		a.cAntigo = new Contato [qntd];
+		
+		for (int i = 0; i < qntd; i++){
+			
+			a.cAntigo [i] = a.c[i];
+		}
+		
+		qntd = qntd - 1;
+		
+		a.c = new Contato [qntd];
+		
+		cout << "Informe o nome do contato que deseja excluir: ";
+		cin >> ContatoExcluir;
+		
+		for (int i = 0; i < qntd + 1; i++){
+			
+			if (ContatoExcluir == a.cAntigo[i].Nome){
+				
+				for (int aux = 0; aux < qntd; aux++){
+					
+					if (aux >= i){
+						
+						a.c[aux] = a.cAntigo [aux + 1];
+					} else {
+						
+						a.c [aux] = a.cAntigo[aux];
+					}
+				}
+				
+				contagem++;
+			}
+		}
+		
+		if (contagem == 0){
+			
+			cout << "Nao foi encontrado um contato de nome " << ContatoExcluir << "." << endl;
+			
+			qntd = qntd + 1;
+			
+			for (int i = 0; i < qntd; i++){
+				
+				a.c[i] = a.cAntigo[i];
+			}
+		}
+		
+		cout << "Dados atualizados." << endl;
+	}
+
+};
+
+void imprimir (Agenda &a, int qntd){
+	
+	cout << "	- Agenda -	" << endl;
+	
+	for (int i = 0; i < qntd; i++){
+		
+		cout << i + 1 << " - " << a.c[i].Nome << " - " << a.c[i].Numero << endl;
+	}
+}
+
+int main (){
+	
+	Agenda a1;
+	int qntd = 0;
+	string pergunta1;
+	string pergunta2;
+	
+	cout << "Informe a quantidade de contatos: ";
+	cin >> qntd;
+	
+	a1.preencher (a1, qntd);
+	
+	imprimir (a1, qntd);
+	
+	cout << "Deseja adicionar ou excluir algum contato? Caso sim, digite sim, se nao, digite nao: ";
+	cin >> pergunta1;
+	
+	while (pergunta1 != "Sim" && pergunta1 != "sim" && pergunta1 != "nao" && pergunta1 != "Nao") {
+		
+		cout << "Voce digitou um codigo invalido, digite sim para adicionar ou excluir algum contato ou nao para nao realizar qualquer operacao: ";
+		cin >> pergunta1;
+	}
+	
+	while ( pergunta1 == "Sim" || pergunta1 == "sim"){
+		
+		cout << "Para adicionar algum contato, digite adicionar. Para excluir, digite excluir: ";
+		cin >> pergunta2;
+		
+		while (pergunta2 != "Adicionar" && pergunta2 != "adicionar" && pergunta2 != "Excluir" && pergunta2 != "excluir"){
+			
+			cout << "Voce digitou um codigo invalido, digite adicionar ou excluir: ";
+			cin >> pergunta2; 
+		}
+		
+		if (pergunta2 == "Adicionar" || pergunta2 == "adicionar"){
+			
+			a1.adicionar (a1, qntd);
+			
+			imprimir (a1, qntd);
+		} else {
+			
+			a1.excluir (a1, qntd);
+			
+			imprimir (a1, qntd);
+		}
+		
+		cout << "Deseja realizar outra operacao? Caso sim, digite sim, se nao, digite nao: ";
+		cin >> pergunta1;
+		
+		while (pergunta1 != "Sim" && pergunta1 != "sim" && pergunta1 != "nao" && pergunta1 != "Nao") {
+		
+			cout << "Voce digitou um codigo invalido, digite sim para adicionar ou excluir algum contato ou nao para nao realizar qualquer operacao: ";
+			cin >> pergunta1;
+		}
+	}
+	
+	cout << "Obrigado por executar o programa." << endl;
+	
+	return 0;
+}
