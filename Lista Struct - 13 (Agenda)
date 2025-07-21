@@ -13,6 +13,16 @@ struct Agenda {
 	Contato *c;
 	Contato *cAntigo;
 	
+	void imprimir (Agenda &a, int qntd){
+	
+		cout << "	- Agenda -	" << endl;
+		
+		for (int i = 0; i < qntd; i++){
+			
+			cout << i + 1 << " - " << a.c[i].Nome << " - " << a.c[i].Numero << endl;
+		}
+	}
+	
 	void preencher (Agenda &a, int qntd){
 		
 		a.c = new Contato [qntd];
@@ -34,6 +44,8 @@ struct Agenda {
 			cout << "Informe o numero do contato " << i + 1 << ": ";
 			cin >> a.c[i].Numero;
 		}
+		
+		imprimir (a, qntd);
 	}
 	
 	void adicionar (Agenda &a, int &qntd){
@@ -77,6 +89,8 @@ struct Agenda {
 		}
 		
 		cout << "Dados atualizados: " << endl;
+		
+		imprimir (a, qntd);
 	
 	}
 	
@@ -123,26 +137,18 @@ struct Agenda {
 			
 			qntd = qntd + 1;
 			
-			for (int i = 0; i < qntd; i++){
+			for (int aux2 = 0; aux2 < qntd; aux2++){
 				
-				a.c[i] = a.cAntigo[i];
+				a.c[aux2] = a.cAntigo[aux2];
 			}
 		}
 		
 		cout << "Dados atualizados." << endl;
+		
+		imprimir (a, qntd);
 	}
 
 };
-
-void imprimir (Agenda &a, int qntd){
-	
-	cout << "	- Agenda -	" << endl;
-	
-	for (int i = 0; i < qntd; i++){
-		
-		cout << i + 1 << " - " << a.c[i].Nome << " - " << a.c[i].Numero << endl;
-	}
-}
 
 int main (){
 	
@@ -155,8 +161,6 @@ int main (){
 	cin >> qntd;
 	
 	a1.preencher (a1, qntd);
-	
-	imprimir (a1, qntd);
 	
 	cout << "Deseja adicionar ou excluir algum contato? Caso sim, digite sim, se nao, digite nao: ";
 	cin >> pergunta1;
@@ -182,12 +186,10 @@ int main (){
 			
 			a1.adicionar (a1, qntd);
 			
-			imprimir (a1, qntd);
 		} else {
 			
 			a1.excluir (a1, qntd);
 			
-			imprimir (a1, qntd);
 		}
 		
 		cout << "Deseja realizar outra operacao? Caso sim, digite sim, se nao, digite nao: ";
