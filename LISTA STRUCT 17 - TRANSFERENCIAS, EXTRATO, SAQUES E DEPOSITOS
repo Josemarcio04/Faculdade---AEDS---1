@@ -1,0 +1,335 @@
+#include <iostream>
+
+using namespace std;
+
+struct Transacao{
+	
+	string tipo;
+	float valor;
+	string data;
+	string destino;
+	string origem;
+	float SaldoAtual;
+};
+
+struct ContaBancaria{
+
+	string numero;
+	float saldo;
+	Transacao *t;
+	Transacao *tAntigo;
+	
+};
+
+struct Banco{
+	
+	ContaBancaria *conta;
+	
+	void informar (Banco &b){
+		
+		int qntd = 0;
+		
+		cout << "Informe quantas contas deseja adicionar: ";
+		cin >> qntd;
+		
+		b.conta = new ContaBancaria [qntd];
+		
+		for (int i = 0; i < qntd; i++){
+			
+			cout << "Informe o numero da conta " << i + 1 << ": ";
+			cin >> b.conta[i].numero;
+			
+			for (int aux = 0; aux < i; aux++){
+				
+				while (b.conta[aux].numero == b.conta[i].numero){
+					
+					cout << "Voce digitou um numero que ja esta sendo utilizado em outra conta. Digite outro numero: ";
+					cin >> b.conta[i].numero;
+					
+					aux = 0;
+				}
+			}
+			
+			cout << "Informe o saldo da conta " << i + 1 << ": ";
+			cin >> b.conta[i].saldo;
+		}
+		
+		string ContaaOperar;
+		int NumContaaOperar = 0;
+		int contagem = 0;
+			
+		if (qntd >= 2){
+				
+			cout << "Informe o numero da conta que deseja operar: ";
+			cin >> ContaaOperar;
+			
+			while (contagem == 0){
+							
+				for (int i = 0; i < qntd; i++){
+							
+					if (ContaaOperar == b.conta[i].numero){
+							
+						NumContaaOperar = i;
+									
+						contagem++;
+					}
+				}
+					
+				if (contagem == 0) {
+								
+					cout << "Nao foi encontrado uma conta com o numero informado, informe o numero da conta que deseja operar novamente: ";
+					cin >> ContaaOperar;
+				}
+			}
+		} else {
+			
+			ContaaOperar = b.conta[0].numero;
+			NumContaaOperar = 0;
+		}
+		
+		int qntd2 = 0;
+		string pergunta0 = "sim";
+
+		for (int i = 0; i < qntd; i++){
+			
+			b.conta[i].t = new Transacao [qntd2];
+		}
+		
+		while (pergunta0 == "sim"){
+			
+			for (int i = 0; i < qntd; i++){
+			
+				b.conta[i].tAntigo = new Transacao [qntd2];
+			}
+			
+			for (int i = 0; i < qntd; i++){
+				
+				for (int aux = 0; aux < qntd2; aux++){
+					
+					b.conta[i].tAntigo[aux] = b.conta[i].t[aux];
+				}
+			}
+			
+			qntd2 = qntd2 + 1;
+			
+			for (int i = 0; i < qntd; i++){
+			
+				b.conta[i].t = new Transacao [qntd2];
+			}
+			
+			for (int i = 0; i < qntd; i++){
+				
+				for (int aux = 0; aux < qntd2 - 1; aux++){
+					
+					b.conta[i].t[aux] = b.conta[i].tAntigo[aux];
+				}
+			}
+	
+			cout << "Informe o tipo de operacao que deseja realizar: ";
+			cin >> b.conta[NumContaaOperar].t[qntd2 - 1].tipo;
+			
+			if (qntd < 2){
+				
+				while (b.conta[NumContaaOperar].t[qntd2 - 1].tipo != "deposito" && b.conta[NumContaaOperar].t[qntd2 - 1].tipo != "saque"){
+				
+					cout << "Voce informou um codigo invalido, favor informar um dos 2 tipos de operacao: deposito ou saque." << endl;
+					cin >> b.conta[NumContaaOperar].t[qntd2 - 1].tipo;
+				}
+				
+				cout << "Informe o valor da transacao que deseja realizar: ";
+				cin >> b.conta[NumContaaOperar].t[qntd2 - 1].valor;
+				
+				while (b.conta[NumContaaOperar].t[qntd2 - 1].valor <= 0){
+						
+					cout << "Valor invalido, informe um valor maior que 0: ";
+					cin >> b.conta[NumContaaOperar].t[qntd2 - 1].valor;
+				}
+				
+				if (b.conta[NumContaaOperar].t[qntd2 - 1].tipo == "deposito"){
+					
+					cout << "Informe a data que esta operando esta transacao: ";
+					cin >> b.conta[NumContaaOperar].t[qntd2 - 1].data;
+					
+					b.deposito(b, NumContaaOperar, qntd2);
+				} else {
+			
+					b.saque(b, NumContaaOperar, qntd2);
+				}	
+			} else {
+				
+				while (b.conta[NumContaaOperar].t[qntd2 - 1].tipo != "deposito" && b.conta[NumContaaOperar].t[qntd2 - 1].tipo != "saque" && b.conta[NumContaaOperar].t[qntd2 - 1].tipo != "transferencia"){
+				
+					cout << "Voce informou um codigo invalido, favor informar um dos 3 tipos de operacao: deposito, saque ou transferencia." << endl;
+					cin >> b.conta[NumContaaOperar].t[qntd2 - 1].tipo;
+				}
+				
+				cout << "Informe o valor da transacao que deseja realizar: ";
+				cin >> b.conta[NumContaaOperar].t[qntd2 - 1].valor;
+				
+				while (b.conta[NumContaaOperar].t[qntd2 - 1].valor <= 0){
+						
+					cout << "Valor invalido, informe um valor maior que 0: ";
+					cin >> b.conta[NumContaaOperar].t[qntd2 - 1].valor;
+				}
+				
+				if (b.conta[NumContaaOperar].t[qntd2 - 1].tipo == "deposito"){
+					
+					cout << "Informe a data que esta operando esta transacao: ";
+					cin >> b.conta[NumContaaOperar].t[qntd2 - 1].data;
+					
+					b.deposito(b, NumContaaOperar, qntd2);
+				} else {
+			
+					if (b.conta[NumContaaOperar].t[qntd2 - 1].tipo == "saque"){
+						
+						b.saque(b, NumContaaOperar, qntd2);
+					} else {
+						
+						b.transferencia(b, NumContaaOperar, qntd2, qntd);
+					}	
+				}
+			}
+			
+			string pergunta1;
+			
+			cout << "Deseja verificar o extrato da conta? ";
+			cin >> pergunta1;
+			
+			if (pergunta1 == "sim"){
+			
+				b.extrato(b, qntd2, NumContaaOperar);
+			}
+		
+			cout << "Deseja realizar outra operacao? ";
+			cin >> pergunta0;
+		}
+		
+		cout << "Obrigado." << endl;
+	}
+	
+	void deposito(Banco &b, int NumContaaOperar, int qntd2){
+					
+		b.conta[NumContaaOperar].saldo = b.conta[NumContaaOperar].saldo + b.conta[NumContaaOperar].t[qntd2 - 1].valor;
+		
+		float SaldoAtual = 0;
+		
+		b.conta[NumContaaOperar].t [qntd2 - 1].SaldoAtual = b.conta[NumContaaOperar].saldo;
+					
+		cout << "Deposito realizado com sucesso." << endl;	
+		
+	}
+	
+	void saque (Banco &b, int NumContaaOperar, int qntd2){
+		
+		while (b.conta[NumContaaOperar].t[qntd2 - 1].valor > b.conta[NumContaaOperar].saldo){
+			
+			cout << "O valor informado para o saque e maior que o saldo da conta, por isso nao e possivel realizar a operacao. Informe um valor menor que R$ " << b.conta[NumContaaOperar].saldo << ",00:";
+			cin >> b.conta[NumContaaOperar].t[qntd2 - 1].valor;
+		}
+		
+		cout << "Informe a data que esta operando esta transacao: ";
+		cin >> b.conta[NumContaaOperar].t[qntd2 - 1].data;
+		
+		b.conta[NumContaaOperar].saldo = b.conta[NumContaaOperar].saldo - b.conta[NumContaaOperar].t[qntd2 - 1].valor;
+		
+		b.conta[NumContaaOperar].t [qntd2 - 1].SaldoAtual = b.conta[NumContaaOperar].saldo;
+		
+		cout << "Saque realizado com sucesso." << endl;	
+		
+	}
+	
+	void transferencia (Banco &b, int NumContaaOperar, int qntd2, int qntd){
+		
+		string Conta2aOperar;
+		int NumConta2aOperar = 0;
+		int contagem = 0;
+		
+		while (b.conta[NumContaaOperar].t[qntd2 - 1].valor > b.conta[NumContaaOperar].saldo){
+							
+			cout << "O valor informado para transferencia e maior que o valor presente no saldo da conta. Informe um valor menor que R$ " << b.conta[NumContaaOperar].saldo << ",00: ";
+			cin >>	b.conta[NumContaaOperar].t[qntd2 - 1].valor;					
+		}
+						
+		cout << "Informe a data que esta operando esta transacao: ";
+		cin >> b.conta[NumContaaOperar].t[qntd2 - 1].data;
+	
+			
+		cout << "Informe o numero da conta para a qual deseja transferir o dinheiro: ";
+		cin >> Conta2aOperar;
+			
+		while (Conta2aOperar == b.conta[NumContaaOperar].numero){
+			
+			cout << "Voce esta tentando transferir um valor de uma conta para a mesma conta, isso nao e possivel. Para realizar transferencias, digite um numero de conta diferente do numero da conta que ja esta operando: ";
+			cin >> Conta2aOperar;
+		}
+		
+		while (contagem == 0){
+					
+			for (int i = 0; i < qntd; i++){
+					
+				if (Conta2aOperar == b.conta[i].numero){
+					
+					NumConta2aOperar = i;
+							
+					contagem++;
+				}
+			}
+			
+			if (contagem == 0) {
+						
+				cout << "Nao foi encontrado uma conta com o numero informado, informe o numero da conta que deseja operar novamente: ";
+				cin >> Conta2aOperar;
+			}
+		}
+		
+		b.conta[NumContaaOperar].saldo = b.conta[NumContaaOperar].saldo - b.conta[NumContaaOperar].t[qntd2 -1].valor;
+		b.conta[NumConta2aOperar].saldo = b.conta[NumConta2aOperar].saldo + b.conta[NumContaaOperar].t[qntd2 -1].valor;
+		
+		cout << "Transferencia realizada com sucesso." << endl;
+		
+		b.conta[NumContaaOperar].t[qntd2 -1].origem = b.conta[NumContaaOperar].numero;
+		b.conta[NumContaaOperar].t[qntd2 - 1].destino = b.conta[NumConta2aOperar].numero;
+		b.conta[NumContaaOperar].t [qntd2 - 1].SaldoAtual = b.conta[NumContaaOperar].saldo;
+		
+		/*b.conta[NumConta2aOperar].t[qntd2 -1].tipo = b.conta[NumContaaOperar].t[qntd2 -1].tipo;
+		b.conta[NumConta2aOperar].t[qntd2 -1].valor = b.conta[NumContaaOperar].t[qntd2 -1].valor;
+		b.conta[NumConta2aOperar].t[qntd2 -1].data = b.conta[NumContaaOperar].t[qntd2 -1].data;
+		b.conta[NumConta2aOperar].t[qntd2 -1].origem = b.conta[NumContaaOperar].numero;
+		b.conta[NumConta2aOperar].t[qntd2 -1].destino = b.conta[NumConta2aOperar].numero;
+		b.conta[NumConta2aOperar].t[qntd2 - 1].SaldoAtual = b.conta[NumConta2aOperar].saldo;*/
+	}
+	
+	void extrato (Banco &b, int qntd2, int NumContaaOperar){
+		
+		cout << "	- Extrato -" << endl; 
+		
+		for (int i = 0; i < qntd2; i++){
+			
+			cout << " - Data: " << b.conta[NumContaaOperar].t[i].data << endl;
+		
+			cout << " - Tipo: " << b.conta[NumContaaOperar].t[i].tipo << endl;
+			
+			cout << " - Valor: " << b.conta[NumContaaOperar].t[i].valor << endl;
+			
+			if (b.conta[NumContaaOperar].t[i].tipo == "transferencia") {
+				
+				cout << " - Destino: " << b.conta[NumContaaOperar].t[i].destino << endl;
+				cout << " - Origem: " << b.conta[NumContaaOperar].t[i].origem << endl;
+			}
+			
+			cout << " - Saldo: " << b.conta[NumContaaOperar].t[i].SaldoAtual << endl;
+			
+			cout << endl;
+		}
+	}
+};
+
+
+int main (){
+	
+	Banco b1;
+	
+	b1.informar (b1);
+	
+	return 0;
+}
