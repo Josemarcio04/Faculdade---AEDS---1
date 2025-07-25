@@ -1,0 +1,291 @@
+#include <iostream>
+
+using namespace std;
+
+void preencher (float **matriz, int linhas, int colunas){
+	
+	cout << "Informe as notas de cada aluno: " << endl;
+	
+	for (int l = 0; l < linhas; l++){
+			
+		if (l == 0){
+			
+			cout << "Joao: " << endl;
+		}
+		
+		if (l == 1){
+			
+			cout << "Marcos: " << endl;
+		}
+		
+		if (l == 2){
+			
+			cout << "Mariana: " << endl;
+		}
+		
+		if (l == 3){
+			
+			cout << "Julia: " << endl;
+		}
+		
+		if (l == 4){
+			
+			cout << "Marcia: " << endl;
+		}
+		
+		for (int c = 0; c < colunas; c++){
+			
+			if (c == 0){
+				
+				cout << "Portugues: ";
+				cin >> matriz [l][c];
+			}
+			
+			if (c == 1){
+				
+				cout << "Matematica: ";
+				cin >> matriz [l][c];
+			}
+			
+			if (c == 2){
+				
+				cout << "Biologia: ";
+				cin >> matriz [l][c];
+			}
+			
+			if (c == 3){
+				
+				cout << "Fisica: ";
+				cin >> matriz [l][c];
+			}
+		}
+		
+		cout << endl;
+	}
+}
+
+void CalcularMediasAlunos (float **matriz, float *MediasAlunos, int linhas, int colunas){
+	
+	int i = 0;
+	
+	for (int l = 0; l < linhas; l++){
+		
+		float soma = 0;
+		
+		for (int c = 0; c < colunas; c++){
+			
+			soma = soma + matriz [l][c];
+		}
+		
+		MediasAlunos[i] = soma / colunas;
+		
+		i++;
+	}
+}
+
+void ImprimirMediasAlunos (float *MediasAlunos, int linhas){
+	
+	cout << "A media de cada aluno e: " << endl;
+	
+	for (int l = 0; l < linhas; l++){
+		
+		if (l == 0){
+			
+			cout << "Joao: ";
+		}
+		
+		if (l == 1){
+			
+			cout << "Marcos: ";
+		}
+		
+		if (l == 2){
+			
+			cout << "Mariana: ";
+		}
+		
+		if (l == 3){
+			
+			cout << "Julia: ";
+		}
+		
+		if (l == 4){
+			
+			cout << "Marcia: ";
+		}
+		
+		cout << MediasAlunos[l] << endl;
+	}
+}
+
+void MaiorMediaAluno (float *MediasAlunos, int linhas){
+	
+	int NumeroAluno = 0;
+	string NomeAluno;
+	float maior = 0;
+	maior = MediasAlunos[0];
+	
+	for (int l = 0; l < linhas; l++){
+		
+		if (MediasAlunos[l] > maior){
+			
+			maior = MediasAlunos[l];
+			
+			NumeroAluno = l;
+		}
+	}
+	
+	if (NumeroAluno == 0){
+			
+		NomeAluno = "Joao";
+	}
+		
+	if (NumeroAluno == 1){
+			
+		NomeAluno = "Marcos";
+	}
+	
+	if (NumeroAluno == 2){
+			
+		NomeAluno = "Mariana";
+	}
+		
+	if (NumeroAluno == 3){
+			
+		NomeAluno = "Julia";
+	}
+	if (NumeroAluno == 4){
+			
+		NomeAluno = "Marcia";
+	}
+
+	cout << "O aluno com maior media e " << NomeAluno << ", sua media e " << maior << "." << endl;
+	
+	cout << endl;
+	
+}
+
+void CalcularMediaDisciplinas (float **matriz, float *MediaDisciplinas, int linhas, int colunas){
+	
+	int i = 0;
+	
+	for (int c = 0; c < colunas; c++){
+		
+		float soma = 0;
+		
+		for (int l = 0; l < linhas; l++){
+			
+			soma = soma + matriz[l][c];
+		}
+		
+		MediaDisciplinas[i] = soma / linhas;
+		
+		i++;
+	}
+}
+
+void ImprimirMediaDisciplinas (float *MediaDisciplinas, int colunas){
+	
+	cout << "Media das disciplinas: " << endl;
+	
+	for (int c = 0; c < colunas; c++){
+		
+		if (c == 0){
+			
+			cout << "Portugues: ";
+		}
+		
+		if (c == 1){
+			
+			cout << "Matematica: ";
+		}
+		
+		if (c == 2){
+			
+			cout << "Biologia: ";
+		}
+		
+		if (c == 3){
+			
+			cout << "Fisica: ";
+		}
+		
+		cout << MediaDisciplinas [c] << "." << endl;
+	}
+}
+
+void MaiorMediaDisciplina (float *MediaDisciplinas, int colunas){
+	
+	int NumeroDiscplina = 0;
+	string NomeDiscplina;
+	int maior = 0;
+	maior = MediaDisciplinas[0];
+	
+	for (int c = 0; c < colunas; c++){
+		
+		if (MediaDisciplinas[c] > maior){
+			
+			maior = MediaDisciplinas[c];
+			
+			NumeroDiscplina = c;
+		}
+	}
+	
+	if (NumeroDiscplina == 0){
+		
+		NomeDiscplina = "Portugues";
+	}
+	
+	if (NumeroDiscplina == 1){
+		
+		NomeDiscplina = "Matematica";
+	}
+	
+	if (NumeroDiscplina == 2){
+		
+		NomeDiscplina = "Biologia";
+	}
+	
+	if (NumeroDiscplina == 3){
+		
+		NomeDiscplina = "Fisica";
+	}
+	
+	cout << "A disciplina com maior media de notas e " << NomeDiscplina << ", sua media e " << maior << "." << endl;
+}
+
+int main (){
+	
+	float **matriz;
+	int linhas = 2;
+	int colunas = 2;
+	
+	matriz = new float *[linhas];
+	
+	for (int i = 0; i < linhas; i++){
+		
+		matriz[i] = new float [colunas]; 
+	}
+	
+	preencher (matriz, linhas, colunas);
+	
+	float *MediasAlunos;
+	MediasAlunos = new float [linhas];
+	
+	CalcularMediasAlunos (matriz, MediasAlunos, linhas, colunas);
+	
+	ImprimirMediasAlunos (MediasAlunos, linhas);
+	
+	MaiorMediaAluno (MediasAlunos, linhas);
+	
+	float *MediaDisciplinas;
+	MediaDisciplinas = new float [colunas];
+	
+	CalcularMediaDisciplinas (matriz, MediaDisciplinas, linhas, colunas);
+	
+	ImprimirMediaDisciplinas (MediaDisciplinas, colunas);
+	
+	MaiorMediaDisciplina (MediaDisciplinas, colunas);
+	
+	return 0;
+}
