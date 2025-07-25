@@ -257,8 +257,8 @@ void MaiorMediaDisciplina (float *MediaDisciplinas, int colunas){
 int main (){
 	
 	float **matriz;
-	int linhas = 2;
-	int colunas = 2;
+	int linhas = 5;
+	int colunas = 4;
 	
 	matriz = new float *[linhas];
 	
