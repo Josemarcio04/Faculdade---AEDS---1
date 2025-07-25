@@ -280,6 +280,14 @@ struct Banco{
 				cout << "Nao foi encontrado uma conta com o numero informado, informe o numero da conta que deseja operar novamente: ";
 				cin >> Conta2aOperar;
 			}
+			
+			while (Conta2aOperar == b.conta[NumContaaOperar].numero){
+			
+				cout << "Voce esta tentando transferir um valor de uma conta para a mesma conta, isso nao e possivel. Para realizar transferencias, digite um numero de conta diferente do numero da conta que ja esta operando: ";
+				cin >> Conta2aOperar;
+				
+				contagem = 0;
+			}
 		}
 		
 		b.conta[NumContaaOperar].saldo = b.conta[NumContaaOperar].saldo - b.conta[NumContaaOperar].t[qntd2 -1].valor;
