@@ -1,0 +1,105 @@
+#include <iostream>	
+
+using namespace std;
+
+void preencher (int **matriz, int linhas, int colunas){
+	
+	cout << "Preencher matriz: ";
+	
+	for (int l = 0; l < linhas; l++){
+		
+		for (int c = 0; c < colunas; c++){
+			
+			cout << "[" << l << "] [" << c << "] = ";
+			cin >> matriz [l][c];
+		}
+	}
+} 
+
+void VerificarTotalVendasSemanais (int **matriz, int linhas, int colunas, int *TotalVendasSemanais){
+	
+	for (int c = 0; c < colunas; c++){
+		
+		int soma = 0;
+		
+		for (int l = 0; l < linhas; l++){
+			
+			soma = soma + matriz [l][c];
+		}
+		
+		TotalVendasSemanais[c] = soma;
+	}
+}
+
+void MenorTotalDeVendas (int *TotalVendasSemanais, int colunas, int &menor, int &IndiceMenor){
+	
+	for (int c = 0; c < colunas; c++){
+		
+		if (TotalVendasSemanais[c] < menor){
+			
+			menor = TotalVendasSemanais[c];
+			
+			IndiceMenor = c;
+		}
+	}	
+}
+
+void VerificarMediaDeVendasSemanais (int *TotalVendasSemanais, int linhas, int colunas, int *MediaDeVendasSemanais){
+	
+	for (int c = 0; c < colunas; c++){
+		
+		MediaDeVendasSemanais[c] = TotalVendasSemanais[c] / linhas;
+	}
+}
+
+void ImprimirMediaDeVendasSemanais (int *MediaDeVendasSemanais, int colunas){
+	
+	cout << "Media de Vendas semanais: " << endl;
+	
+	for (int c = 0; c < colunas; c++){
+		
+		cout << "Semana " << c + 1 << ": " << MediaDeVendasSemanais[c] << "." << endl;
+	}
+}
+
+int main (){
+	
+	int **matriz;
+	int linhas, colunas;
+	
+	cout << "Informe o numero de linhas: ";
+	cin >> linhas;
+	
+	cout << "Informe o numero de colunas: ";
+	cin >> colunas;
+	
+	matriz  = new int *[linhas];
+	
+	for (int i = 0; i < linhas; i++){
+		
+		matriz [i] = new int [colunas];
+	}
+	
+	preencher (matriz, linhas, colunas);
+	
+	int *TotalVendasSemanais;
+	TotalVendasSemanais = new int [colunas];
+	
+	VerificarTotalVendasSemanais (matriz, linhas, colunas, TotalVendasSemanais);
+	
+	int menor = TotalVendasSemanais[0];
+	int IndiceMenor = 0;
+	
+	MenorTotalDeVendas (TotalVendasSemanais, colunas, menor, IndiceMenor);
+	
+	cout << "A semana com o menor numero de vendas foi a " << IndiceMenor + 1 << ", com " << menor << " vendas." << endl;
+	
+	int *MediaDeVendasSemanais;
+	MediaDeVendasSemanais = new int [colunas];
+	
+	VerificarMediaDeVendasSemanais (TotalVendasSemanais, linhas, colunas, MediaDeVendasSemanais);
+	
+	ImprimirMediaDeVendasSemanais (MediaDeVendasSemanais, colunas);
+	
+	return 0;
+}
