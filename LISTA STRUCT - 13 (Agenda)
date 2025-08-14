@@ -1,3 +1,5 @@
+// Estrutra 1: 
+
 #include <iostream>
 
 using namespace std;
@@ -203,6 +205,218 @@ int main (){
 	}
 	
 	cout << "Obrigado por executar o programa." << endl;
+	
+	return 0;
+}
+// Estrutura 2: 
+
+#include <iostream>
+
+using namespace std;
+
+struct Contato{
+	
+	string nome;
+	string numero;	
+	
+};
+
+struct Agenda{
+	
+	Contato *contatos;
+	int QntdContatos;
+	
+};
+
+void preencherAgenda (Agenda &a){
+	
+	cout << "Informe quantos contatos deseja adicionar: ";
+	cin >> a.QntdContatos;
+		
+	a.contatos = new Contato [a.QntdContatos];
+		
+	for (int i = 0; i < a.QntdContatos; i++){
+			
+		cout << "Informe o nome do contato " << i + 1 << ": ";
+		cin >> a.contatos[i].nome;
+			
+		for (int aux = 0; aux < i; aux++){
+				
+			while (a.contatos[i].nome == a.contatos[aux].nome){
+					
+				cout << "Voce informou um nome de produto que ja esta sendo utilizado. Favor informar um nome que nao foi utilizado ainda: ";
+				cin >> a.contatos[i].nome; 
+				
+				aux = -1;
+			}
+		}
+			
+		cout << "Informe o numero do contato " << i + 1 << ": ";
+		cin >> a.contatos[i].numero;
+	}
+}
+
+void imprimirAgenda (Agenda &a){
+	
+	cout << "\t- Agenda - " << endl;
+	
+	for (int i = 0; i < a.QntdContatos; i++){
+		
+		cout << a.contatos[i].nome << " - " << a.contatos[i].numero << endl;
+	}
+}
+
+void adicionarContato (Agenda &a){
+	
+	string pergunta;
+	
+	cout << "Deseja adicionar algum contato? ";
+	cin >> pergunta;
+	
+	if (pergunta == "sim"){
+		
+		Contato *contatosAntigos;
+		contatosAntigos = new Contato [a.QntdContatos];
+		
+		for (int i = 0; i < a.QntdContatos; i++){
+			
+			contatosAntigos[i].nome = a.contatos[i].nome;
+			contatosAntigos[i].numero = a.contatos[i].numero;
+		}
+		
+		a.QntdContatos = a.QntdContatos + 1;
+		
+		a.contatos = new Contato [a.QntdContatos];
+		
+		for (int i = 0; i < a.QntdContatos -1; i++){
+			
+			a.contatos[i].nome = contatosAntigos[i].nome;
+			a.contatos[i].numero = contatosAntigos[i].numero;
+		}
+		
+		cout << "Informe o nome do contato que deseja adicionar, ou digite sair para cancelar a operacao: ";
+		cin >> a.contatos[a.QntdContatos - 1].nome;
+		
+		if (a.contatos[a.QntdContatos - 1].nome == "sair"){
+			
+			a.QntdContatos = a.QntdContatos - 1;
+			a.contatos = new Contato [a.QntdContatos];
+			
+			for (int i = 0; i < a.QntdContatos; i++){
+				
+				a.contatos[i] = contatosAntigos[i];
+			}
+		} else {
+			
+			cout << "Informe o numero do contato que deseja adicionar, ou digite sair para cancelar a operacao: ";
+			cin >> a.contatos[a.QntdContatos - 1].numero;
+			
+			if (a.contatos[a.QntdContatos - 1].numero == "sair"){
+				
+				a.QntdContatos = a.QntdContatos - 1;
+				a.contatos = new Contato [a.QntdContatos];
+				
+				for (int i = 0; i < a.QntdContatos; i++){
+					
+					a.contatos[i] = contatosAntigos[i];
+				}
+			}
+		}
+	}
+}
+
+void excluirContato (Agenda &a){
+	
+	string pergunta;
+	
+	cout << "Deseja excluir algum contato? ";
+	cin >> pergunta;
+	
+	if (pergunta == "sim"){
+		
+		string contatoAExcluir;
+		int contagem = 0;
+		
+		cout << "Informe o nome do contato que deseja excluir, ou digite sair pra cancelar a operacao: ";
+		cin >> contatoAExcluir;
+		
+		while (contagem == 0 && contatoAExcluir != "sair"){
+			
+			for (int i = 0; i < a.QntdContatos; i++){
+				
+				if (contatoAExcluir == a.contatos[i].nome){
+					
+					contagem++;
+				}
+			}
+			
+			if (contagem == 0){
+					
+				cout << "Nao foi encontrado um contato com esse nome, favor informe o nome novamente ou digite sair para cancelar a operacao: ";
+				cin >> contatoAExcluir;
+			}
+		}
+		
+		if (contatoAExcluir != "sair"){
+		
+			a.QntdContatos = a.QntdContatos - 1;
+			
+			for (int i = 0; i < a.QntdContatos; i++){
+				
+				if (a.contatos[i].nome == contatoAExcluir){
+					
+					for (int aux = i; aux < a.QntdContatos; aux++){
+						
+						a.contatos[aux] = a.contatos [aux + 1];
+					}
+				}
+			}
+			
+			Contato *contatosAntigos;
+			contatosAntigos = new Contato [a.QntdContatos];
+			
+			for (int i = 0; i < a.QntdContatos; i++){
+				
+				contatosAntigos [i] = a.contatos[i];
+			}
+			
+			a.contatos = new Contato [a.QntdContatos];
+			
+			for (int i = 0; i < a.QntdContatos; i++){
+				
+				a.contatos [i] = contatosAntigos [i];
+			}
+		}
+	}
+}
+
+int main (){
+	
+	Agenda a1;
+	string pergunta;
+	
+	preencherAgenda (a1);
+		
+	imprimirAgenda (a1);
+	
+	cout << "Deseja adicionar ou excluir algum contato? ";
+	cin >> pergunta;
+	
+	while (pergunta == "sim"){
+		
+		adicionarContato (a1);
+		
+		imprimirAgenda (a1);
+		
+		excluirContato (a1);
+		
+		imprimirAgenda (a1);
+		
+		cout << "Tendo em vista a agenda acima, deseja adicionar ou excluir algum contato? ";
+		cin >> pergunta;
+	}
+	
+	cout << "Obrigado." << endl;
 	
 	return 0;
 }
