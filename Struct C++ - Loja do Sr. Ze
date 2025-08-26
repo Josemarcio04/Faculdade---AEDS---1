@@ -1,0 +1,515 @@
+#include <iostream>
+
+using namespace std;
+
+struct Produto{
+   
+    string nome;
+    float valor;
+    float custo;
+    string marca;
+    int estoque;
+    int EstoqueMinimo;
+};
+
+struct Loja{
+   
+    Produto *produto;
+    int qntd;
+};
+
+void informar (Loja &l){
+   
+    cout << "Informe quantos produtos deseja adicionar na loja: ";
+    cin >> l.qntd;
+   
+    l.produto = new Produto[l.qntd];
+   
+    for (int i = 0; i < l.qntd; i++){
+       
+        cout << "Informe o nome do produto " << i + 1 << ": ";
+        cin >> l.produto[i].nome;
+        
+        for (int aux = 0; aux < i; aux++){
+        	
+        	while (l.produto[i].nome == "sair"){
+				
+				cout << "Voce informou um nome invalido para o produto. Informe um nome diferente de sair: ";
+				cin >> l.produto[i].nome;
+			}
+        	
+        	while (l.produto[aux].nome == l.produto[i].nome){
+        		
+        		cout << "Voce ja informou um produto com esse nome, informe um nome diferente para este produto: ";
+        		cin >> l.produto[i].nome;
+        		
+        		aux = -1;
+			}
+		}
+        
+        cout << "Informe o custo do produto " << i + 1 << ": ";
+        cin >> l.produto[i].custo;
+       
+        cout << "Informe o valor do produto " << i + 1 << ": ";
+        cin >> l.produto[i].valor;
+       
+        cout << "Informe a marca do produto " << i + 1 << ": ";
+        cin >> l.produto[i].marca;
+        
+        cout << "Informe o estoque do produto: " << i + 1 << ": ";
+        cin >> l.produto[i].estoque;
+        
+        cout << "Informe o estoque minimo do produto: " << i + 1 << ": ";
+        cin >> l.produto[i].EstoqueMinimo;
+    }
+}
+
+void verificarProduto (Loja &l){
+   
+    string produto;
+    int NumProduto;
+    string pergunta;
+   
+	cout << "Deseja verificar se ha algum produto? ";
+	cin >> pergunta;
+   
+	while (pergunta == "sim"){
+		
+		cout << "Deseja verificar se ha qual produto? ";
+	    cin >> produto;
+	   
+	   bool verifica;
+	   verifica = false;
+	   
+	   for (int i = 0; i < l.qntd; i++){
+	       
+	       if (produto == l.produto[i].nome){
+	           
+	           NumProduto = i;
+	           verifica = true;
+	       }
+		   
+		}
+	   
+	   if (verifica == true){
+	   	
+			cout << "Produto encontrado." << endl;
+			cout << "- Dados do produto " << l.produto[NumProduto].nome << " -" << endl;
+			cout << "Valor: " << l.produto[NumProduto].valor << "." << endl;
+			cout << "Custo: " << l.produto[NumProduto].custo << endl;
+			cout << "Marca: " << l.produto[NumProduto].marca << "." << endl;
+			cout << "Estoque: " << l.produto[NumProduto].estoque << "." << endl;
+			cout << "Estoque minimo: " << l.produto[NumProduto].EstoqueMinimo << "." << endl;	
+		} else {
+	
+		   cout << "Produto nao encontrado." << endl;
+		}
+	   
+	   cout << "Deseja verificar se ha mais algum produto? ";
+	   cin >> pergunta;
+	}
+}
+
+void verificarEstoque (Loja &l){
+	
+	string pergunta;
+	
+	cout << "Deseja verficar se ha algum produto abaixo do estoque minimo? ";
+	cin >> pergunta;
+	
+	while (pergunta == "sim"){
+		
+		int contagem = 0;
+	
+		for (int i = 0; i < l.qntd; i++){
+			
+			if (l.produto[i].estoque < l.produto[i].EstoqueMinimo){
+				
+				contagem++;
+			}
+		}
+		
+		if (contagem == 1){
+			
+			cout << "Produto abaixo do estoque minimo: "; 
+		} else {
+			
+			if (contagem > 1){
+				
+				cout << "Produtos abaixo do estoque minimo: ";
+			} else {
+				
+				cout << "Nao ha produtos abaixo do estoque minimo." << endl;
+			}
+		}
+		
+		int contagem2 = 0;
+		
+		for (int i = 0; i < l.qntd; i++){
+			
+			if (l.produto[i].estoque < l.produto[i].EstoqueMinimo){
+				
+				contagem2++;
+				
+				if (contagem2 != contagem){
+					
+					cout << l.produto[i].nome << ", ";
+				} else {
+					
+					cout << l.produto[i].nome << "." << endl;
+				}
+			}
+		}
+		
+		if (contagem > 0){
+			
+			cout << "Comprar ";
+		}
+		
+		contagem2 = 0;
+		
+		for (int i = 0; i < l.qntd; i++){
+			
+			if (l.produto[i].estoque < l.produto[i].EstoqueMinimo){
+				
+				contagem2++;
+				
+				if (contagem2 != contagem && contagem2 + 1 != contagem){
+					
+					cout << l.produto[i].EstoqueMinimo - l.produto[i].estoque;
+					
+					if (l.produto[i].EstoqueMinimo - l.produto[i].estoque == 1){
+						
+						cout << " unidade de " << l.produto[i].nome << ", ";
+					} else {
+						
+						cout << " unidades de " << l.produto[i].nome << ", ";
+					}
+				} else {
+					
+					if (contagem2 + 1 == contagem){
+						
+						cout << l.produto[i].EstoqueMinimo - l.produto[i].estoque;
+					
+						if (l.produto[i].EstoqueMinimo - l.produto[i].estoque == 1){
+							
+							cout << " unidade de " << l.produto[i].nome << " e ";
+						} else {
+							
+							cout << " unidades de " << l.produto[i].nome << " e ";
+						}
+					} else {
+						
+						cout << l.produto[i].EstoqueMinimo - l.produto[i].estoque;
+						
+						if (l.produto[i].EstoqueMinimo - l.produto[i].estoque == 1){
+							
+							cout << " unidade de " << l.produto[i].nome << " ." << endl;
+						} else {
+							
+							cout << " unidades de " << l.produto[i].nome << "." << endl;
+						}
+					}
+				}
+			}
+		}
+		
+		cout << "Deseja verficar se ha mais algum produto abaixo do estoque minimo? ";
+		cin >> pergunta;
+	}
+}
+
+void alterarEstoque (Loja &l){
+	
+	string pergunta;
+	string pergunta2;
+	string produto;
+	int qntd;
+	
+	cout << "Deseja alterar o estoque de algum produto? ";
+	cin >> pergunta;
+	
+	while (pergunta == "sim" && produto != "sair" && pergunta2 != "sair"){
+		
+		int contagem = 0;
+		
+		cout << "Informe o nome do produto que deseja alterar o estoque, ou digite sair para cancelar a operacao: ";
+		cin >> produto;
+		
+		while (contagem == 0 && produto != "sair"){
+			
+			for (int i = 0; i < l.qntd; i++){
+			
+				if (l.produto[i].nome == produto){
+					
+					contagem++;
+				}
+			}
+			
+			if (contagem == 0) {
+				
+				cout << "Produto nao encontrado. Informe novamente o nome do produto que deseja alterar no estoque, ou digite sair para cancelar a operacao: ";
+				cin >> produto;
+			}
+		}
+		
+		if (produto != "sair"){
+			
+			cout << "Deseja retirar ou acrescentar produtos no estoque? ";
+			cin >> pergunta2;
+			
+			while (pergunta2 != "acrescentar" && pergunta2 != "retirar" &&  pergunta2 != "sair"){
+				
+				cout << "Voce informou uma acao invalida. Informe retirar ou acrescentar, se deseja alterar a quantidade de produtos no estoque, ou digite sair para cancelar a operacao: ";
+				cin >> pergunta2;
+			}
+			
+			if (pergunta2 == "retirar"){
+				
+				for (int i = 0; i < l.qntd; i++){
+			
+					if (l.produto[i].nome == produto){
+						
+						cout << "Sabendo que ha " << l.produto[i].estoque;
+						
+						if (l.produto[i].estoque == 1){
+						
+						 cout << " unidade desse produto no estoque, deseja retirar quantas unidades? ";
+						 cin >> qntd;
+						} else {
+							
+							cout << " unidades desse produto no estoque, deseja retirar quantas unidades? ";
+							 cin >> qntd;
+						}
+						
+						while (qntd > l.produto[i].estoque){
+							
+							cout << "Voce informou uma quantidade maior que a presente no estoque. Informe uma quantidade menor ou igual a quantidade de unidades desse produto no estoque: ";
+							cin >> qntd;
+						}
+						
+						l.produto[i].estoque = l.produto[i].estoque - qntd;
+						
+						cout << "Estoque atualizado. Agora ha " << l.produto[i].estoque;
+						
+						if (l.produto[i].estoque == 1){
+							
+							cout << " unidade do produto " << l.produto[i].nome << " no estoque." <<endl;
+						} else {
+							
+							cout << " unidades do produto " << l.produto[i].nome << " no estoque." <<endl;
+						}
+					}
+				}
+				
+			} else {
+				
+				if (pergunta2 == "acrescentar"){
+					
+					for (int i = 0; i < l.qntd; i++){
+						
+						if (l.produto[i].nome == produto){
+							
+							cout << "Deseja acrescentar quantas unidades ao estoque desse produto? ";
+							cin >> qntd;
+							
+							while (qntd < 0){
+								
+								cout << "Voce informou um valor invalido. Informe um numero maior que 0, ou digite 0 para cancelar a opereacao: ";
+								cin >> qntd;
+							}
+								
+							if (qntd != 0){
+								
+								l.produto[i].estoque = l.produto[i].estoque + qntd;
+							}
+							
+							cout << "O estoque do produto foi atualizado para ";
+							
+							if (l.produto[i].estoque == 1){
+								
+								cout << l.produto[i].estoque << " unidade." << endl;
+							} else {
+								
+								cout << l.produto[i].estoque << " unidades." << endl;
+							}
+						}
+					}
+				}
+			}
+		}
+
+		if (produto != "sair" && pergunta2 != "sair"){
+			
+			cout << "Deseja alterar o estoque de algum outro produto? ";
+			cin >> pergunta;
+		}
+	}
+}
+
+void alterarPreco (Loja &l){
+	
+	string pergunta1;
+	
+	cout << "Deseja alterar o preco de algum produto? ";
+	cin >> pergunta1;
+	
+	while (pergunta1 ==  "sim"){
+		
+		char pergunta2;
+		
+		cout << "Se deseja alterar o preco de todos os produto com base em um percentual de lucro pre-definido, digite 1, se deseja alterar o preco de apenas um produto com base em um percentual de lucro pre-definido, digite 2, se deseja alterar o preco de todos os produtos sem levar em conta o percentual de lucro pre-definido, digte 3, se deseja alterar o preco de algum produto sem levar em conta o percentual de lucro, digite 4, se deseja cancelar a operacao, digite 5: ";
+		cin >> pergunta2;
+		
+		while (pergunta2 != '1' && pergunta2 != '2' && pergunta2 != '3' && pergunta2 != '4' &&  pergunta2 != '5'){
+			
+			cout << "Voce digitou um valor invalido, verifique o menu: " << endl;
+			cout << "1 - Alterar todos com lucro pre-definido." << endl;
+			cout << "2 - Alterar o preco de um produto com lucro pre-definido." << endl;
+			cout << "3 - Alterar o preco de todos os produtos sem lucro pre-definido." << endl;
+			cout << "4 - Alterar o preco de um produto sem lucro pre-definido." << endl;
+			cout << "5 - Cancelar operacao." << endl;
+			cout << "Selecione uma das opcoes acima: ";
+			cin >> pergunta2;
+		}
+		
+		// Variaveis no switch case: 
+		float lucro = 0; 
+		string produto; 
+		bool EncotrarProduto;
+		float valor = 0;
+		
+		switch (pergunta2){
+			
+			case '1': 
+		
+				cout << "Informe o percentual de lucro que deseja obter sobre os produtos, ou digite -1 para cancelar a operacao: ";
+				cin >> lucro;
+				
+				if (lucro != -1){
+					
+					for (int i = 0; i < l.qntd; i++){
+						
+						l.produto[i].valor = l.produto[i].custo * (1  + (lucro) / 100);
+					}
+					
+					cout << "Os precos dos produtos foram atualizados para obter um lucro de " << lucro << "% sobre o custo." << endl;
+				}
+				break;	
+			
+			case '2': 
+			
+				EncotrarProduto = false;
+				
+				cout << "Informe o nome do produto que deseja alterar o preco, ou digite sair para cancelar a operacao: ";
+				cin >> produto;
+				
+				while (EncotrarProduto == false && produto != "sair"){
+					
+					for (int i = 0; i < l.qntd; i++){
+						
+						if (l.produto[i].nome == produto){
+							
+							EncotrarProduto = true;
+							
+							 lucro = 0;
+							
+							cout << "Informe o percentual de lucro que deseja obter sobre o produto, ou digite -1 para cancelar a operacao: ";
+							cin >> lucro;
+							
+							if (lucro != -1){
+								
+								l.produto[i].valor = l.produto[i].custo * (1 + (lucro) / 100);
+								
+								cout << "Preco do produto " << l.produto[i].nome << " foi atualizado para " << l.produto[i].valor << "." << endl;
+							}
+						}
+					}
+					
+					if (EncotrarProduto == false){
+						
+						cout << "Nao foi encontrado um produto com esse nome, informe o nome de um produto que esteja presente na loja, ou digite sair para cancelar a operacao: ";
+						cin >> produto;
+					}
+				}
+				break;
+			
+			case '3':
+		
+				cout << "Informe o preco que deseja colocar para todos os produtos, ou digite -1 para cancelar a operacao: ";
+				cin >>  valor;
+				
+				if (valor != -1){
+					
+					for (int i = 0; i < l.qntd; i++){
+						
+						l.produto[i].valor = valor;
+					}
+					
+					cout << "Os precos dos produtos foram atualizados para o valor de" << valor << " reais." << endl;
+				}
+			break;
+			
+			case '4':
+				
+				string produto;
+				bool EncotrarProduto;
+				
+				EncotrarProduto = false;
+				
+				cout << "Informe o nome do produto que deseja alterar o preco, ou digite sair para cancelar a operacao: ";
+				cin >> produto;
+				
+				while (EncotrarProduto == false && produto != "sair"){
+					
+					for (int i = 0; i < l.qntd; i++){
+						
+						if (l.produto[i].nome == produto){
+							
+							EncotrarProduto = true;
+							
+							float valor = 0;
+							
+							cout << "Informe o preco que deseja colocar para esse produto, ou digite -1 para cancelar a operacao: ";
+							cin >> valor;
+							
+							if (valor != -1){
+								
+								l.produto[i].valor = valor;
+							}
+						}
+					}
+					
+					if (EncotrarProduto == false){
+						
+						cout << "Nao foi encontrado um produto com esse nome, informe o nome de um produto que esteja presente na loja, ou digite sair para cancelar a operacao: ";
+						cin >> produto;
+					}
+				}
+			break;
+		}
+		
+		if (pergunta2 != '5'){
+			
+		cout << "Deseja alterar o preco de mais algum produto? ";
+		cin >> pergunta1;
+		}
+	}	
+}
+
+int main (){
+   
+    Loja l1;
+   
+    informar (l1);
+   
+    verificarProduto (l1);
+    
+    verificarEstoque (l1);
+    
+    alterarEstoque (l1);
+    
+    alterarPreco (l1);
+   
+    return 0;
+}
